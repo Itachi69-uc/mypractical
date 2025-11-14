@@ -1,0 +1,51 @@
+Practical no 1 
+
+
+const int buzzerPin = 9;
+
+void setup() {
+  pinMode(buzzerPin, OUTPUT);
+}
+
+void loop() {
+  analogWrite(buzzerPin, 127);  // Buzzer ON (medium intensity)
+  delay(500);                   // ON for 0.5 sec
+
+  analogWrite(buzzerPin, 0);    // Buzzer OFF
+  delay(2500);                  // OFF for 2.5 sec
+}
+
+
+
+
+
+Practical no 2
+
+
+int IRSensor = 9;   // connect IR sensor output to Arduino pin 9
+int LED = 13;       // connect LED to Arduino pin 13
+
+void setup() {
+  Serial.begin(115200);          // Start Serial Communication
+  Serial.println("Serial Working");
+
+  pinMode(IRSensor, INPUT);      // IR Sensor as INPUT
+  pinMode(LED, OUTPUT);          // LED as OUTPUT
+}
+
+void loop() {
+  int sensorStatus = digitalRead(IRSensor);   // Read IR sensor value
+
+  if (sensorStatus == 1)                      // If HIGH → No object / motion ended
+  {
+    digitalWrite(LED, LOW);                   // Turn off LED
+    Serial.println("Motion Ended!");
+  }
+  else                                         // If LOW → Object detected
+  {
+    digitalWrite(LED, HIGH);                  // Turn on LED
+    Serial.println("Motion Detected!");
+  }
+
+  delay(100); // small delay for stability
+}
