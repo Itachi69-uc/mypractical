@@ -1,27 +1,56 @@
 import java.util.*;
+
 class RR {
-    public static void main(String[] a) {
-        Scanner s=new Scanner(System.in);
-        System.out.print("Enter no. of processes: ");
-        int n=s.nextInt();
-        int bt[]=new int[n],rt[]=new int[n],wt[]=new int[n],tat[]=new int[n];
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of processes: ");
+        int n = sc.nextInt();
+
+        int burstTime[] = new int[n];
+        int remainingTime[] = new int[n];
+        int waitingTime[] = new int[n];
+
         System.out.print("Enter burst times: ");
-        for(int i=0;i<n;i++){bt[i]=s.nextInt();rt[i]=bt[i];}
-        System.out.print("Enter time quantum: ");
-        int tq=s.nextInt(),t=0;
-        while(true){
-            boolean done=true;
-            for(int i=0;i<n;i++)
-                if(rt[i]>0){done=false;
-                    if(rt[i]>tq){rt[i]-=tq;t+=tq;}
-                    else{t+=rt[i];wt[i]=t-bt[i];rt[i]=0;}
-                }
-            if(done)break;
+        for (int i = 0; i < n; i++) {
+            burstTime[i] = sc.nextInt();
+            remainingTime[i] = burstTime[i];
         }
-        System.out.println("\nP\tBT\tWT\tTAT");
-        for(int i=0;i<n;i++){
-            tat[i]=bt[i]+wt[i];
-            System.out.println("P"+(i+1)+"\t"+bt[i]+"\t"+wt[i]+"\t"+tat[i]);
+
+        System.out.print("Enter time quantum: ");
+        int quantum = sc.nextInt();
+
+        int currentTime = 0;
+
+        while (true) {
+            boolean allFinished = true;
+
+            for (int i = 0; i < n; i++) {
+
+                if (remainingTime[i] > 0) {
+                    allFinished = false;
+
+                    int execute = Math.min(remainingTime[i], quantum);
+                    remainingTime[i] -= execute;
+                    currentTime += execute;
+
+                    if (remainingTime[i] == 0) {
+                        waitingTime[i] = currentTime - burstTime[i];
+                    }
+                }
+            }
+
+            if (allFinished) break;
+        }
+
+        System.out.println("\nProcess\tBurst\tWaiting\tTurnAround");
+        for (int i = 0; i < n; i++) {
+            int turnAround = burstTime[i] + waitingTime[i];
+            System.out.println("P" + (i+1) + "\t" +
+                               burstTime[i] + "\t" +
+                               waitingTime[i] + "\t" +
+                               turnAround);
         }
     }
 }
